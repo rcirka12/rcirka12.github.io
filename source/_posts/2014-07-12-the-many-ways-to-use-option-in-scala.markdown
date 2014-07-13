@@ -16,22 +16,22 @@ case class Author(name:Option[String])
 val author:Author = ...
 ```
 
-The traditional way is to check to see if the name is defined. This way can be prone to error is you forget to add the "get" method
+The traditional way is to check if the name is defined. This way can be prone to error is you forget to add the "get" method
 
 ```scala
-val authorName:String = if (author.name.isDefined) author.name.get else "empty"[/scala]
+val authorName:String = if (author.name.isDefined) author.name.get else "name is empty"
 ```
 
-A simplier way to check for Option is GetOrElse
+A best way to check for a simple Option is GetOrElse
 
 ```scala
-val authorName:String = author.name.getOrElse("blank")
+val authorName:String = author.name.getOrElse("name is empty")
 ```
 
 In Scala 2.10, the fold method was introduced for Option. You could also use the following syntax:
 
 ```scala
-val authorName:String = author.name.fold("empty")
+val authorName:String = author.name.fold("name is empty")
 ```
 
 It saves a little bit of typing, but not much difference, it might confuse those that are not familiar with it.
@@ -42,7 +42,7 @@ You could also use pattern matching on Option, which is generally discouraged, s
 val authorName:String =
   author.name match {
     case Some(name) => name
-    case _ => "empty"
+    case _ => "name is empty"
   }
 ```
 
@@ -53,22 +53,22 @@ Let's say our author variable is now an option:
 val author:Option[Author] = ...
 ```
 
-Using the isDefined method is getting rather verbose and error prone here.
+Using the *isDefined* method is getting rather verbose and error prone here.
 
 ```scala
-val authorName:String = if (author.isDefined && author.get.name.isDefined) author.name.get else "empty"
+val authorName:String = if (author.isDefined && author.get.name.isDefined) author.get.name.get else "empty"
 ```
 
 You could use getOrElse here, but you would still need to check is the the author is defined. Still rather clunky.
 
 ```scala
-val authorName:String = if (author.isDefined) author.get.name.get else "empty"
+val authorName:String = if (author.isDefined) author.get.name.getOrElse("empty")
 ```
 
-The most idiomatic way is to use nested options is map. The following will return the name if both author and author.name are present
+The most idiomatic way to use nested options is map. The following will return the name if both author and author.name are present
 
 ```scala
-val authorName:Option[String] = author.map(_.name)[/scala]
+val authorName:Option[String] = author.map(_.name)
 ```
 
 Or:
@@ -78,6 +78,7 @@ val authorName:String = author.map(_.name).getOrElse("name is empty")
 ```
 
 ### Multiple Nested Options
+#### Flatmap
 Let's up the ante here.
 
 ```scala
@@ -92,21 +93,22 @@ In this scenario, author, author.name, and author.firstName could be None. FlatM
 val authorName = author.flatMap(_.name).flatMap(_.firstName)
 ```
 
-Or
+or
 
 ```scala
 val authorName = author.flatMap(_.name).flatMap(_.firstName).getOrElse("first name is empty")
 ```
 
-flatMap reduces the nested options, allowing use to retrieve what we need.
+flatMap reduces the nested options, allowing us to retrieve what we need. No need to use any if statements, it is type safe.
 
+#### For-Comprehension
 Another way is to use a for-comprehension. It is a little more verbose, but allows us to make the code a little cleaner and easy to maintain. It is best used when dealing with multiple levels of Options.
 
 ```scala
 val authorName:Option[String] = for {
-author <- author
-name <- author.name
-firstName <- name.firstName
+  author <- author
+  name <- author.name
+  firstName <- name.firstName
 } yield firstName
 ```
 
@@ -114,8 +116,8 @@ or
 
 ```scala
 val authorName:String = (for {
-author <- author
-name <- author.name
-firstName <- name.firstName
+  author <- author
+  name <- author.name
+  firstName <- name.firstName
 } yield firstName).getOrElse("First name is empty")
 ```
