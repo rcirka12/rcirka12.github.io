@@ -102,14 +102,14 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The traditional way is to check to see if the name is defined. This way can be prone to error is you forget to add the &ldquo;get&rdquo; method</p>
+<p>The traditional way is to check if the name is defined. This way can be prone to error is you forget to add the &ldquo;get&rdquo; method</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">isDefined</span><span class="o">)</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get</span> <span class="k">else</span> <span class="s">&quot;name is empty&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>A simplier way to check for Option is GetOrElse</p>
+<p>A best way to check for a simple Option is GetOrElse</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;name is empty&quot;</span><span class="o">)</span>
@@ -149,7 +149,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Using the isDefined method is getting rather verbose and error prone here.</p>
+<p>Using the <em>isDefined</em> method is getting rather verbose and error prone here.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">author</span><span class="o">.</span><span class="n">isDefined</span> <span class="o">&amp;&amp;</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">isDefined</span><span class="o">)</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get</span> <span class="k">else</span> <span class="s">&quot;empty&quot;</span>
@@ -163,7 +163,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The most idiomatic way is to use nested options is map. The following will return the name if both author and author.name are present</p>
+<p>The most idiomatic way to use nested options is map. The following will return the name if both author and author.name are present</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">author</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">name</span><span class="o">)</span>
