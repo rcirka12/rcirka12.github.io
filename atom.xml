@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Developer Blog]]></title>
-  <link href="http://rcirka12.github.io/atom.xml" rel="self"/>
-  <link href="http://rcirka12.github.io/"/>
-  <updated>2014-07-17T10:50:33-04:00</updated>
-  <id>http://rcirka12.github.io/</id>
+  <link href="http://www.ronaldcirka.com/atom.xml" rel="self"/>
+  <link href="http://www.ronaldcirka.com/"/>
+  <updated>2014-07-17T11:10:38-04:00</updated>
+  <id>http://www.ronaldcirka.com/</id>
   <author>
     <name><![CDATA[Ron Cirka]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Many Ways to Use Option in Scala]]></title>
-    <link href="http://rcirka12.github.io/blog/2014/07/12/the-many-ways-to-use-option-in-scala/"/>
+    <link href="http://www.ronaldcirka.com/blog/2014/07/12/the-many-ways-to-use-option-in-scala/"/>
     <updated>2014-07-12T19:54:36-04:00</updated>
-    <id>http://rcirka12.github.io/blog/2014/07/12/the-many-ways-to-use-option-in-scala</id>
+    <id>http://www.ronaldcirka.com/blog/2014/07/12/the-many-ways-to-use-option-in-scala</id>
     <content type="html"><![CDATA[<p>There are many way to use Option in Scala. Per scala docs, the idiomatic way to use Option is to treat it as a collection that can have either a length of one of zero.</p>
 
 <p>Let&rsquo;s says we have a basic class, Author</p>
