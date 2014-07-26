@@ -27,7 +27,7 @@ A best way to check for a simple Option is GetOrElse
 ```scala
 val authorName:String = author.name.getOrElse("name is empty")
 ```
-
+<!-- more -->
 In Scala 2.10, the fold method was introduced for Option. You could also use the following syntax:
 
 ```scala
