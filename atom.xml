@@ -4,7 +4,7 @@
   <title><![CDATA[Developer Blog]]></title>
   <link href="http://www.ronaldcirka.com/atom.xml" rel="self"/>
   <link href="http://www.ronaldcirka.com/"/>
-  <updated>2014-07-17T11:10:38-04:00</updated>
+  <updated>2014-07-26T19:12:12-04:00</updated>
   <id>http://www.ronaldcirka.com/</id>
   <author>
     <name><![CDATA[Ron Cirka]]></name>
@@ -43,6 +43,9 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;name is empty&quot;</span><span class="o">)</span>
 </span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
 
 
 <p>In Scala 2.10, the fold method was introduced for Option. You could also use the following syntax:</p>
