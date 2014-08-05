@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The many ways to use Option in Scala"
+title: "Using Option in Scala"
 date: 2014-07-12 19:54:36 -0400
 comments: true
 categories: 
