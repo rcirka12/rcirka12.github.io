@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Option in Scala - Developer Blog</title>
+  <meta name="author" content="Ron Cirka">
+
+  
+  <meta name="description" content="There are many way to use Option in Scala. Per scala docs, the idiomatic way to use Option is to treat it as a collection that can have either a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.ronaldcirka.com/blog/2014/07/12/the-many-ways-to-use-option-in-scala">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Developer Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-7282976-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Developer Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.ronaldcirka.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using Option in Scala</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-12T19:54:36-04:00" pubdate data-updated="true">Jul 12<sup>th</sup>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://www.ronaldcirka.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>There are many way to use Option in Scala. Per scala docs, the idiomatic way to use Option is to treat it as a collection that can have either a length of one of zero.</p>
+
+<p>Let&rsquo;s says we have a basic class, Author</p>
+
+<h3>Simple Option checking</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">Author</span><span class="o">(</span><span class="n">name</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span>
+</span><span class='line'><span class="k">val</span> <span class="n">author</span><span class="k">:</span><span class="kt">Author</span> <span class="o">=</span> <span class="o">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The traditional way is to check if the name is defined. This way can be prone to error is you forget to add the &ldquo;get&rdquo; method</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">isDefined</span><span class="o">)</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get</span> <span class="k">else</span> <span class="s">&quot;name is empty&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A best way to check for a simple Option is GetOrElse</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;name is empty&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<p>In Scala 2.10, the fold method was introduced for Option. You could also use the following syntax:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">fold</span><span class="o">(</span><span class="s">&quot;name is empty&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It saves a little bit of typing, but not much difference, it might confuse those that are not familiar with it.</p>
+
+<p>You could also use pattern matching on Option, which is generally discouraged, since it is rather verbose.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span>
+</span><span class='line'>  <span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="k">match</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">name</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">name</span>
+</span><span class='line'>    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="s">&quot;name is empty&quot;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Nested Options</h3>
+
+<p>Let&rsquo;s say our author variable is now an option:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">author</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Author</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using the <em>isDefined</em> method is getting rather verbose and error prone here.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">author</span><span class="o">.</span><span class="n">isDefined</span> <span class="o">&amp;&amp;</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">isDefined</span><span class="o">)</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get</span> <span class="k">else</span> <span class="s">&quot;empty&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You could use getOrElse here, but you would still need to check is the the author is defined. Still rather clunky.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">author</span><span class="o">.</span><span class="n">isDefined</span><span class="o">)</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;empty&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The most idiomatic way to use nested options is map. The following will return the name if both author and author.name are present</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">author</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">name</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">name</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;name is empty&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Multiple Nested Options</h3>
+
+<h4>Flatmap</h4>
+
+<p>Let&rsquo;s up the ante here.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">Author</span><span class="o">(</span><span class="n">name</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Name</span><span class="o">])</span>
+</span><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">Name</span><span class="o">(</span><span class="n">firstName</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span> <span class="n">lastName</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span>
+</span><span class='line'><span class="k">val</span> <span class="n">author</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Author</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this scenario, author, author.name, and author.firstName could be None. FlatMap to the rescue.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span> <span class="k">=</span> <span class="n">author</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">name</span><span class="o">).</span><span class="n">flatMap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">firstName</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span> <span class="k">=</span> <span class="n">author</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">name</span><span class="o">).</span><span class="n">flatMap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">firstName</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;first name is empty&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>flatMap reduces the nested options, allowing us to retrieve what we need. No need to use any if statements, it is type safe.</p>
+
+<h4>For-Comprehension</h4>
+
+<p>Another way is to use a for-comprehension. It is a little more verbose, but allows us to make the code a little cleaner and easy to maintain. It is best used when dealing with multiple levels of Options.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">author</span> <span class="k">&lt;-</span> <span class="n">author</span>
+</span><span class='line'>  <span class="n">name</span> <span class="k">&lt;-</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span>
+</span><span class='line'>  <span class="n">firstName</span> <span class="k">&lt;-</span> <span class="n">name</span><span class="o">.</span><span class="n">firstName</span>
+</span><span class='line'><span class="o">}</span> <span class="k">yield</span> <span class="n">firstName</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">authorName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="o">(</span><span class="k">for</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">author</span> <span class="k">&lt;-</span> <span class="n">author</span>
+</span><span class='line'>  <span class="n">name</span> <span class="k">&lt;-</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span>
+</span><span class='line'>  <span class="n">firstName</span> <span class="k">&lt;-</span> <span class="n">name</span><span class="o">.</span><span class="n">firstName</span>
+</span><span class='line'><span class="o">}</span> <span class="k">yield</span> <span class="n">firstName</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;First name is empty&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ron Cirka</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-12T19:54:36-04:00" pubdate data-updated="true">Jul 12<sup>th</sup>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.ronaldcirka.com/blog/2014/07/12/the-many-ways-to-use-option-in-scala/" data-via="" data-counturl="http://www.ronaldcirka.com/blog/2014/07/12/the-many-ways-to-use-option-in-scala/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/12/06/deploying-play-framework-to-elastic-beanstalk-in-docker/" title="Next Post: Deploying Play Framework to Elastic Beanstalk in Docker">Deploying Play Framework to Elastic Beanstalk in Docker &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/12/06/deploying-play-framework-to-elastic-beanstalk-in-docker/">Deploying Play Framework to Elastic Beanstalk in Docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/12/the-many-ways-to-use-option-in-scala/">Using Option in Scala</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ron Cirka -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'ronaldcirka';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.ronaldcirka.com/blog/2014/07/12/the-many-ways-to-use-option-in-scala/';
+        var disqus_url = 'http://www.ronaldcirka.com/blog/2014/07/12/the-many-ways-to-use-option-in-scala/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
